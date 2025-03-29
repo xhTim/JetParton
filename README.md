@@ -22,7 +22,8 @@ This is the framework to couple the jet parton shower and parton cascade
 
 # Modify and compile the code
 1. Clone the repository to your lxplus home. Then mv the 'event0' fold to your eos disk (in my case, mv event0 /eos/cms/store/group/phys_heavyions/huangxi/Wiese/).
-2. Modify grid_Submit.py line 20 'cd /eos/cms/store/group/phys_heavyions/huangxi/Wiese': cd to your event0 directory.
+2. Modify grid_Submit.py line 20 'cd /eos/cms/store/group/phys_heavyions/huangxi/Wiese': cd to your event0 directory
+   and line 87 'environment = "LD_LIBRARY_PATH=/afs/cern.ch/user/h/huangxi/Tools/pythia8310/lib:$LD_LIBRARY_PATH"': set the environment to your pythia library path.
 3. Modify Generate_job.sh line 11 'mkdir /eos/cms/store/group/phys_heavyions/huangxi/Wiese/Playground': create the folder 'Playground' in the same directory as event0.
 4. Modify paths to the final output root files in event0/fastjet_hadron/fastjet_hadron_trackTree.cc line 222 'TFile * fout = TFile::Open( Form("/eos/cms/store/group/phys_heavyions/huangxi/PC/pp_parton_cascade_%d.root",jobnumber) ,"recreate");'
 5. Modify paths to Pythia and fastjet in Makefile in pythia_parton/, hadronization_urqmd/fragmentation/ and fastjet_hadron/.
@@ -42,5 +43,5 @@ make
 cd ../
 
 # Run the code
-You can set number of tasks and number of events in each task in Generate_job.sh.
+You can set number of tasks and number of events in each output in Generate_job.sh. Note: the number of output files is the square of the number of tasks.
 Then submit jobs: ./Generate_jobs.sh

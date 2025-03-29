@@ -14,7 +14,7 @@ mkdir /eos/cms/store/group/phys_heavyions/huangxi/Wiese/Playground
 ((Randum_number=$RANDOM))
 for (( ii=0; ii<1; ii++ ))
 do
-    ./grid_Submit.py $ii 3500 100000 # 3500 is the number of tasks, 100000 is the number of events in each task
+    ./grid_Submit.py $ii 60 100000 # !!! 60 is the number of tasks, 100000 is the number of events in each output. Total number of events is 60^2*100000 !!!
     #./testgrid_Submittest.py $ii 20 20000
     #sleep 10s
     #./grid_Submit_pythia_only.py $ii 600000

@@ -84,6 +84,7 @@ done
         fout.write(jobs)
 
     condor_submit = '''universe        = vanilla
+environment = "LD_LIBRARY_PATH=/afs/cern.ch/user/h/huangxi/Tools/pythia8310/lib:$LD_LIBRARY_PATH"
 executable      = {job_name}
 arguments       = $(Process)
 output          = logs/out_$(Process).log

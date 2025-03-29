@@ -33,9 +33,13 @@ int main(int argv, char* argc[])
     Pythia pythia;
     string random_str = string(argc[2]);
     int totalevent = atoi(argc[1]);
+    /*time_t now = time(NULL);
+    int offset = atoi(argc[2]);
+    int seed = static_cast<int>(now) + offset;*/
     pythia.readString("Random:setSeed = on");
     //pythia.readString("Random:seed = 0");  //92549 792 458 871
     pythia.readString("Random:seed = " + random_str);
+    // pythia.readString("Random:seed = " + seed);
     pythia.readString("Beams:eCM = 13000.0");//5020,2760 GeV
     pythia.readString("Beams:idA = 2212");
     pythia.readString("Beams:idB = 2212"); //2212 is proton; 1000791970 for 197Au; 1000822080 for 208Pb;
