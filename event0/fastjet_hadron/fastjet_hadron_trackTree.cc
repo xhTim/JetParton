@@ -47,13 +47,31 @@ int main(int argv, char* argc[])
     int event_loop_flag = 1;
     int count_event_number = 0;
     
-    
-   
-    //basic stuff
-  
- 
+    //Save the parton info
 
- 
+    ifstream inputFile_p("parton_info.dat");
+    if (!inputFile_p.is_open()) {
+        cerr << "Error opening parton_info.dat!" << endl;
+        return 1;
+    }
+    string line;
+    string line2;
+    getline(inputFile_p, line); // Read and ignore the first line
+
+	int par_pdgid;
+	double par_px, par_py, par_pz, par_e, par_x, par_y, par_z, par_t, mid1,mid2;
+
+	//parton stuff
+	std::vector< int > parton_pid;
+	std::vector< float > parton_px;
+	std::vector< float > parton_py;
+	std::vector< float > parton_pz;
+	std::vector< float > parton_e;
+	std::vector< float > parton_x;
+	std::vector< float > parton_y;
+	std::vector< float > parton_z;
+	std::vector< float > parton_t;
+
   	std::vector< float > genpx;
  	std::vector< float > genpy;
   	std::vector< float > genpz;
@@ -75,15 +93,23 @@ int main(int argv, char* argc[])
   	
   	TTree * trackTree = new TTree("trackTree","v1");
  
-  	
+	trackTree->Branch("par_pdgid",&parton_pid);
+	trackTree->Branch("par_px",&parton_px);
+	trackTree->Branch("par_py",&parton_py);
+	trackTree->Branch("par_pz",&parton_pz);
+	trackTree->Branch("par_e",&parton_e);
+	trackTree->Branch("par_x",&parton_x);
+	trackTree->Branch("par_y",&parton_y);
+	trackTree->Branch("par_z",&parton_z);
+	trackTree->Branch("par_t",&parton_t);
+
+
   	trackTree->Branch("px",&genpx);
   	trackTree->Branch("py",&genpy);
   	trackTree->Branch("pz",&genpz);
   	trackTree->Branch("m",&genm);
   	trackTree->Branch("pid",&genpid);
   	trackTree->Branch("chg",&genchg);
-  
-  	
   
   	trackTree->Branch("genJetEta",&genJetEta);
   	trackTree->Branch("genJetPt",&genJetPt);
@@ -95,18 +121,20 @@ int main(int argv, char* argc[])
   	trackTree->Branch("genDau_eta",		&gendau_eta);	 
   	trackTree->Branch("genDau_phi",		&gendau_phi );
 
-
-
-
-
-
-
-    
-    
     int njetevent_count = 0;
 
     //*******************************START EVENT LOOP****************************************
     for (int iev = 0; iev < Nevent; iev ++) {
+
+		parton_pid.clear();
+		parton_px.clear();
+		parton_py.clear();
+		parton_pz.clear();
+		parton_e.clear();
+		parton_x.clear();
+		parton_y.clear();
+		parton_z.clear();
+		parton_t.clear();
 
     	genpx.clear();
     	genpy.clear();
@@ -125,7 +153,40 @@ int main(int argv, char* argc[])
     	gendau_eta.clear();
     	gendau_phi.clear();
 
+		//PARTON stuff
 
+        int numPartons;
+        if (inputFile_p.eof()) {
+           cout << "end the file" << endl;
+           break;
+        }
+        
+        std::getline(inputFile_p, line2);
+
+        if (line2.empty() || line2[0] == '#') {
+            // Skip comments and empty lines
+            //continue;
+			getline(inputFile_p, line2);
+        }
+        std::istringstream iss(line2);
+        iss >> numPartons;
+
+        for (int i = 0; i < numPartons; ++i) {
+            inputFile_p >> par_pdgid >> par_px >> par_py >> par_pz>> par_e 
+			>> par_x >> par_y >> par_z >> par_t >> mid1 >> mid2;
+			
+			parton_pid.push_back(par_pdgid);
+			parton_px.push_back(par_px);
+			parton_py.push_back(par_py);
+			parton_pz.push_back(par_pz);
+			parton_e.push_back(par_e);
+			parton_x.push_back(par_x);
+			parton_y.push_back(par_y);
+			parton_z.push_back(par_z);
+			parton_t.push_back(par_t);
+		}
+
+		//PARTICLE stuff
 
     	//test infile status 
         if(feof(infile)) {
@@ -133,8 +194,6 @@ int main(int argv, char* argc[])
             cout << " End the event loop ~~~ " << endl;
             break;
         }
-
-
 
         fscanf(infile,"%s %d\n",stemp1, &total_number_of_particles);
         input_particles.clear();
@@ -219,7 +278,9 @@ int main(int argv, char* argc[])
     }//****************************************END EVENT LOOP***************************************
 
     fclose(infile);
-    TFile * fout = TFile::Open( Form("/eos/cms/store/group/phys_heavyions/huangxi/PC/pp_parton_cascade_%d.root",jobnumber) ,"recreate");
+	inputFile_p.close();
+    //TFile * fout = TFile::Open( Form("/eos/cms/store/group/phys_heavyions/huangxi/PC/pp_parton_cascade_%d.root",jobnumber) ,"recreate");
+    TFile * fout = TFile::Open( Form("/eos/cms/store/group/phys_heavyions/xiaoyul/wenbin/sample/pp_parton_cascade_%d.root",jobnumber) ,"recreate");
     trackTree->Write();
     fout->Close();
     return 0;
