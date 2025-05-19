@@ -39,7 +39,7 @@ ln -sf ../pythia_parton/parton_info.dat ./
 rm -r ana/parton-collisionsHistory.dat
 rm -r ana/zpc.res
 cd ../
-rm -rf pythia_parton/parton_info.dat
+# rm -rf pythia_parton/parton_info.dat
 
 # fragmentation and urqmd
 cd hadronization_urqmd
