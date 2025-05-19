@@ -280,7 +280,7 @@ int main(int argv, char* argc[])
     fclose(infile);
 	inputFile_p.close();
     //TFile * fout = TFile::Open( Form("/eos/cms/store/group/phys_heavyions/huangxi/PC/pp_parton_cascade_%d.root",jobnumber) ,"recreate");
-    TFile * fout = TFile::Open( Form("/eos/cms/store/group/phys_heavyions/xiaoyul/wenbin/sample/pp_parton_cascade_%d.root",jobnumber) ,"recreate");
+    TFile * fout = TFile::Open( Form("/eos/cms/store/group/phys_heavyions/huangxi/PC/pp_parton_cascade_%d.root",jobnumber) ,"recreate");
     trackTree->Write();
     fout->Close();
     return 0;
