@@ -65,6 +65,7 @@ cd ../
 # jet finding of final hadrons
 cd fastjet_hadron
 ln -sf ../hadronization_urqmd/urqmd_code/urqmd/particle_list.dat ./
+ln -sf ../pythia_parton/parton_info.dat ./
 ./fastjet_hadron_trackTree {nevent} $ii
 rm -r ../hadronization_urqmd/urqmd_code/urqmd/particle_list.dat
 cd ../
@@ -95,7 +96,7 @@ log             = logs/condor.log
 # should_transfer_files = YES
 # transfer_input_files = event0
 # transfer_output_files = Playground
-+MaxRuntime =200000
++MaxRuntime =40000
 queue {nfold}
     '''.format(job_name=job_name, nfold=nfold)
     job_name2 = "Submit_%s.sh"%(fold_id_start)
