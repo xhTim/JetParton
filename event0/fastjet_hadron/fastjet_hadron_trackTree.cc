@@ -161,13 +161,10 @@ int main(int argv, char* argc[])
            break;
         }
         
-        std::getline(inputFile_p, line2);
-
-        if (line2.empty() || line2[0] == '#') {
-            // Skip comments and empty lines
-            //continue;
-			getline(inputFile_p, line2);
-        }
+        while (std::getline(inputFile_p, line2)) {
+    		if (line2.empty() || line2[0]=='#') continue;
+    		break;
+	}
         std::istringstream iss(line2);
         iss >> numPartons;
 
