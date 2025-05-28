@@ -165,6 +165,7 @@ int main(int argv, char* argc[])
     		if (line2.empty() || line2[0]=='#') continue;
     		break;
 	}
+	
         std::istringstream iss(line2);
         iss >> numPartons;
 

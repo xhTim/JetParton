@@ -16,7 +16,7 @@ date
 # First link the file
 
 fold_id_start2=$(({fold_id_start} + $1 * {nfold}))
-fold_id_end=$(({fold_id_start} + $1 * {nfold} + {nfold}))
+fold_id_end=$(({fold_id_start} + $1 * {nfold} + 1))
 cd /eos/cms/store/group/phys_heavyions/huangxi/Wiese
 # Then run the framework
 for (( ii=$fold_id_start2; ii<$fold_id_end; ii++ ))
