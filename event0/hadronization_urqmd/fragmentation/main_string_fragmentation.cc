@@ -581,8 +581,8 @@ int main(int argv, char* argc[])
             }
         }
         //if(simble==0){output2 << iEvent+1<<" "<<simble << endl;}
-            output2 << "         " << iEvent <<"          " << simble << "         0         0" << endl;
-            if (simble == 0) continue;
+        output2 << "         " << iEvent <<"          " << simble << "         0         0" << endl;
+        if (simble > 0) {
             for(int i=0; i<pythia.event.size();i++)
                 {
                 if (pythia.event[i].isFinal() ){
@@ -682,6 +682,7 @@ int main(int argv, char* argc[])
                     }
                 }
             }
+        }
         pythia.next();
 
 }
