@@ -66,6 +66,7 @@ cd ../
 cd fastjet_hadron
 ln -sf ../hadronization_urqmd/urqmd_code/urqmd/particle_list.dat ./
 ln -sf ../pythia_parton/parton_info.dat ./
+ln -sf ../hadronization_urqmd/fragmentation/hadrons_frag_full.dat ./
 ./fastjet_hadron_trackTree {nevent} $ii
 rm -r ../hadronization_urqmd/urqmd_code/urqmd/particle_list.dat
 cd ../

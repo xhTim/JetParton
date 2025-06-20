@@ -33,15 +33,24 @@ int main(int argv, char* argc[])
     int n_event = atoi(argc[1]);
     bool DO_Colorless_frag = false;
     string output_filename2;
+    string output_filename3;
     output_filename2 = "hadrons_frag1.dat";// output files of final hadrons
+    output_filename3 = "hadrons_frag_full.dat";
     cout << output_filename2 << endl;
     //string ramdomseed_str = "Random:seed = "+random_str;
-    ofstream output2(output_filename2.c_str()); 
+    ofstream output2(output_filename2.c_str());
+    ofstream output3(output_filename3.c_str()); 
     if (!output2.is_open() ) {
         cout << "cannot open output file:"<< endl
          << output_filename2 << endl;
         return -1;
-    }   /*
+    }
+    if (!output3.is_open() ) {
+        cout << "cannot open output file:"<< endl
+         << output_filename3 << endl;
+        return -1;
+    }
+       /*
 	output2<<"OSC1997A"<<endl;
 	output2<<"final_id_p_x"<<endl;
 	output2<<" 3DHydro       1.1  (197,    79)+(197,    79)  eqsp  0.1000E+03         1"<<endl;
@@ -129,7 +138,7 @@ int main(int argv, char* argc[])
             break;
         }
         fscanf(infile1,"%d %d %d %lf %d %d %d %d\n",&mid, &mid1, &Npart, &midd, &mid2, &mid3, &mid4, &midd5);
-        if (Npart==0 ) {output2 << "         " << iEvent <<"          " << 0 << "         0         0" << endl; continue;}
+        if (Npart==0 ) {output2 << "         " << iEvent <<"          " << 0 << "         0         0" << endl; output3 << "         " << iEvent <<"          " << 0 << "         0         0" << endl; continue;}
         int Nquark=0;
         int Naquark =0;
         int Ngluon=0;
@@ -581,8 +590,9 @@ int main(int argv, char* argc[])
             }
         }
         //if(simble==0){output2 << iEvent+1<<" "<<simble << endl;}
-        output2 << "         " << iEvent <<"          " << simble << "         0         0" << endl;
+        output3 << "         " << iEvent <<"          " << simble << "         0         0" << endl;
         if (simble > 0) {
+            output2 << "         " << iEvent <<"          " << simble << "         0         0" << endl;
             for(int i=0; i<pythia.event.size();i++)
                 {
                 if (pythia.event[i].isFinal() ){
@@ -687,6 +697,7 @@ int main(int argv, char* argc[])
 
 }
 output2.close();
+output3.close();
 fclose(infile1);
 
   return 0;
