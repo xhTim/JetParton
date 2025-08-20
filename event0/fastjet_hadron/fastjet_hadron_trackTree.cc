@@ -32,7 +32,11 @@ int main(int argv, char* argc[])
     // selection for final particles which are used to reconstruct jet
     double absetamax = 2.4;
     // parameter setting
+    const double z_cut = 0.1;
     const double R_jet = 0.8; // CMS cut, CMS PAS HIN-21-013
+    fastjet::contrib::SoftDrop *softdrop = new fastjet::contrib::SoftDrop(1, z_cut, R_jet);
+    softdrop->set_reclustering(false, 0);
+
     const double jet_ptmin = 500.0;
     double jet_absetamax = 1.6;
     vector<fastjet::PseudoJet> input_particles;
@@ -91,6 +95,10 @@ int main(int argv, char* argc[])
     std::vector<float> genJetEta;
     std::vector<float> genJetPhi;
     std::vector<int> genJetChargedMultiplicity;
+    std::vector<double > Zgs;
+    std::vector<double > Rgs;
+    std::vector<double > ZgTgBs;
+    std::vector<double > SDJetMass;
     std::vector<std::vector<int>> gendau_chg;
     std::vector<std::vector<int>> gendau_pid;
     std::vector<std::vector<float>> gendau_pt;
@@ -120,6 +128,10 @@ int main(int argv, char* argc[])
     trackTree->Branch("genJetPt", &genJetPt);
     trackTree->Branch("genJetPhi", &genJetPhi);
     trackTree->Branch("genJetChargedMultiplicity", &genJetChargedMultiplicity);
+    trackTree->Branch("Zgs", &Zgs);
+    trackTree->Branch("Rgs", &Rgs);
+    trackTree->Branch("ZgTgBs", &ZgTgBs);
+    trackTree->Branch("SDJetMass", &SDJetMass);
     trackTree->Branch("genDau_chg", &gendau_chg);
     trackTree->Branch("genDau_pid", &gendau_pid);
     trackTree->Branch("genDau_pt", &gendau_pt);
@@ -152,6 +164,10 @@ int main(int argv, char* argc[])
 	genJetEta.clear();
 	genJetPhi.clear();
 	genJetChargedMultiplicity.clear();
+	Zgs.clear();
+	Rgs.clear();
+	ZgTgBs.clear();
+	SDJetMass.clear();
 	gendau_chg.clear();
 	gendau_pid.clear();
 	gendau_pt.clear();
