@@ -328,12 +328,36 @@ int main(int argv, char* argc[])
 		gendau_phi.push_back(tmp_phi);
 		gendau_chg.push_back(tmp_chg);
 		gendau_pid.push_back(tmp_pid);
+
+		// SoftDrop
+		fastjet::PseudoJet sd_jet = *softdrop(inclusive_jets[i]);
+		if (!sd_jet.has_structure_of<fastjet::contrib::SoftDrop>()) 
+		{
+			Zgs.push_back(-2);
+			Rgs.push_back(-2);
+			ZgTgBs.push_back(-2);
+                        SDJetMass.push_back(-2);
+                        continue;
+		}
+
+		fastjet::PseudoJet parent1;
+		fastjet::PseudoJet parent2;
+		if (!sd_jet.has_parents(parent1,parent2))
+		{
+			Zgs.push_back(-1);
+			Rgs.push_back(-1);
+			ZgTgBs.push_back(-1);
+			SDJetMass.push_back(-1);
+			continue;
+		}
+
+		Zgs.push_back(sd_jet.structure_of<fastjet::contrib::SoftDrop>().symmetry());
+		Rgs.push_back(sd_jet.structure_of<fastjet::contrib::SoftDrop>().delta_R());
+		ZgTgBs.push_back(Zgs[i] * Rgs[i] / R_jet);
+		SDJetMass.push_back(sd_jet.m());
+
 	} //************************************END JET LOOP******************************************
-	    trackTree->Fill();
-
-
-
-
+	trackTree->Fill();
     }//****************************************END EVENT LOOP***************************************
 
     fclose(infile);
