@@ -16,7 +16,7 @@ fastjet_hadron_trackTree.o: fastjet_hadron_trackTree.cc
 	$(GCC) -I$(PYTHIAINC) $(FASTJETINC) $(ROOTCFLAGS) -c fastjet_hadron_trackTree.cc
 
 $(EXE): fastjet_hadron_trackTree.o
-	$(GCC) -O3 -I$(PYTHIAINC) $(FASTJETINC) $(ROOTCFLAGS) -o $(EXE) fastjet_hadron_trackTree.o $(PYTHIALIBS)/libpythia8.a $(ROOTLIBS) -ldl $(FASTJETLIBS) 
+	$(GCC) -O3 -I$(PYTHIAINC) $(FASTJETINC) $(ROOTCFLAGS) -o $(EXE) fastjet_hadron_trackTree.o $(PYTHIALIBS)/libpythia8.a $(ROOTLIBS) -ldl $(FASTJETLIBS) -lRecursiveTools
 
 .PHONY:clean
 clean:

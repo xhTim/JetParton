@@ -1,5 +1,6 @@
 #include "fastjet/ClusterSequence.hh"
 #include "fastjet/PseudoJet.hh"
+#include "fastjet/contrib/SoftDrop.hh"
 #include "Pythia8/Pythia.h"
 #include "TMath.h"
 #include "TTree.h"
@@ -34,8 +35,8 @@ int main(int argv, char* argc[])
     // parameter setting
     const double z_cut = 0.1;
     const double R_jet = 0.8; // CMS cut, CMS PAS HIN-21-013
-    fastjet::contrib::SoftDrop *softdrop = new fastjet::contrib::SoftDrop(1, z_cut, R_jet);
-    softdrop->set_reclustering(false, 0);
+    fastjet::contrib::SoftDrop softdrop(1, z_cut, R_jet);
+    softdrop.set_reclustering(false, 0);
 
     const double jet_ptmin = 500.0;
     double jet_absetamax = 1.6;
@@ -330,7 +331,7 @@ int main(int argv, char* argc[])
 		gendau_pid.push_back(tmp_pid);
 
 		// SoftDrop
-		fastjet::PseudoJet sd_jet = *softdrop(inclusive_jets[i]);
+		fastjet::PseudoJet sd_jet = softdrop(inclusive_jets[i]);
 		if (!sd_jet.has_structure_of<fastjet::contrib::SoftDrop>()) 
 		{
 			Zgs.push_back(-2);
