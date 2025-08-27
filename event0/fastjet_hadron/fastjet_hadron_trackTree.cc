@@ -31,7 +31,7 @@ int main(int argv, char* argc[])
     int Nevent = atoi(argc[1]);
     int jobnumber = atoi(argc[2]);
     // selection for final particles which are used to reconstruct jet
-    double absetamax = 2.4;
+    double particle_absetamax = 2.4;
     double particle_ptmin = 0.3;
     // parameter setting
     const double z_cut = 0.1;
@@ -39,7 +39,7 @@ int main(int argv, char* argc[])
     fastjet::contrib::SoftDrop softdrop(1, z_cut, R_jet);
     softdrop.set_reclustering(false, 0);
 
-    const double jet_ptmin = 500.0;
+    const double jet_ptmin = 550.0;
     double jet_absetamax = 1.6;
     vector<fastjet::PseudoJet> input_particles;
     char inputfile[128];
@@ -284,11 +284,11 @@ int main(int argv, char* argc[])
 	count_event_number++;
 
 	// Then do the jet finding
-	fastjet::Selector particle_selector = fastjet::SelectorAbsEtaMax(absetamax) && fastjet::SelectorPtMin( particle_ptmin );
+	// fastjet::Selector particle_selector = fastjet::SelectorAbsEtaMax(absetamax) && fastjet::SelectorPtMin( particle_ptmin );
 	fastjet::JetDefinition jet_def(fastjet::antikt_algorithm, R_jet);
 	// select jet
 	// fastjet::Selector jet_selector = fastjet::SelectorAbsEtaMax( jet_absetamax ) && fastjet::SelectorPtMin( jet_ptmin );
-	input_particles = particle_selector(input_particles);
+	// input_particles = particle_selector(input_particles);
 	fastjet::ClusterSequence clust_seq(input_particles, jet_def);
 	// get the resulting jets ordered in pt
 	vector<fastjet::PseudoJet> inclusive_jets = sorted_by_pt(clust_seq.inclusive_jets());
@@ -297,8 +297,7 @@ int main(int argv, char* argc[])
 	//*************************************START JET LOOP*****************************************
 	for (unsigned int i = 0; i < inclusive_jets.size(); i++)
 	{
-		if (inclusive_jets[i].pt() < jet_ptmin || fabs(inclusive_jets[i].eta()) > jet_absetamax)
-			continue;
+		if (inclusive_jets[i].pt() < jet_ptmin || fabs(inclusive_jets[i].eta()) > jet_absetamax) continue;
 		std::vector<float> tmp_pt;
 		std::vector<float> tmp_eta;
 		std::vector<float> tmp_phi;
@@ -309,6 +308,7 @@ int main(int argv, char* argc[])
 		//***********************START constituents LOOP*********************************
 		for (unsigned j = 0; j < constituents.size(); j++)
 		{
+			if (fabs(constituents[j].eta()) > particle_absetamax || constituents[j].pt() < particle_ptmin) continue;
 			if (particleData.charge(constituents[j].user_index()))
 			{
 				chMult++;
@@ -369,4 +369,3 @@ int main(int argv, char* argc[])
     fout->Close();
     return 0;
 }
-
