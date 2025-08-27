@@ -32,6 +32,7 @@ int main(int argv, char* argc[])
     int jobnumber = atoi(argc[2]);
     // selection for final particles which are used to reconstruct jet
     double absetamax = 2.4;
+    double particle_ptmin = 0.3;
     // parameter setting
     const double z_cut = 0.1;
     const double R_jet = 0.8; // CMS cut, CMS PAS HIN-21-013
@@ -283,11 +284,11 @@ int main(int argv, char* argc[])
 	count_event_number++;
 
 	// Then do the jet finding
-	// fastjet::Selector particle_selector = fastjet::SelectorAbsEtaMax(absetamax) && fastjet::SelectorPtMin( particle_ptmin );
+	fastjet::Selector particle_selector = fastjet::SelectorAbsEtaMax(absetamax) && fastjet::SelectorPtMin( particle_ptmin );
 	fastjet::JetDefinition jet_def(fastjet::antikt_algorithm, R_jet);
 	// select jet
 	// fastjet::Selector jet_selector = fastjet::SelectorAbsEtaMax( jet_absetamax ) && fastjet::SelectorPtMin( jet_ptmin );
-	// input_particles = particle_selector(input_particles);
+	input_particles = particle_selector(input_particles);
 	fastjet::ClusterSequence clust_seq(input_particles, jet_def);
 	// get the resulting jets ordered in pt
 	vector<fastjet::PseudoJet> inclusive_jets = sorted_by_pt(clust_seq.inclusive_jets());
@@ -296,7 +297,7 @@ int main(int argv, char* argc[])
 	//*************************************START JET LOOP*****************************************
 	for (unsigned int i = 0; i < inclusive_jets.size(); i++)
 	{
-		if (inclusive_jets[i].pt() < jet_ptmin)
+		if (inclusive_jets[i].pt() < jet_ptmin || fabs(inclusive_jets[i].eta()) > jet_absetamax)
 			continue;
 		std::vector<float> tmp_pt;
 		std::vector<float> tmp_eta;
