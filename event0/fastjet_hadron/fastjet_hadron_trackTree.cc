@@ -31,16 +31,16 @@ int main(int argv, char* argc[])
     int Nevent = atoi(argc[1]);
     int jobnumber = atoi(argc[2]);
     // selection for final particles which are used to reconstruct jet
-    double particle_absetamax = 2.4;
-    double particle_ptmin = 0.3;
+    // double particle_absetamax = 2.4;
+    // double particle_ptmin = 0.3;
     // parameter setting
     const double z_cut = 0.1;
     const double R_jet = 0.8; // CMS cut, CMS PAS HIN-21-013
     fastjet::contrib::SoftDrop softdrop(1, z_cut, R_jet);
     softdrop.set_reclustering(false, 0);
 
-    const double jet_ptmin = 550.0;
-    double jet_absetamax = 1.6;
+    const double jet_ptmin = 500.0;
+    // double jet_absetamax = 1.6;
     vector<fastjet::PseudoJet> input_particles;
     char inputfile[128];
     sprintf(inputfile, "particle_list.dat");
@@ -297,7 +297,7 @@ int main(int argv, char* argc[])
 	//*************************************START JET LOOP*****************************************
 	for (unsigned int i = 0; i < inclusive_jets.size(); i++)
 	{
-		if (inclusive_jets[i].pt() < jet_ptmin || fabs(inclusive_jets[i].eta()) > jet_absetamax) continue;
+		if (inclusive_jets[i].pt() < jet_ptmin) continue;
 		std::vector<float> tmp_pt;
 		std::vector<float> tmp_eta;
 		std::vector<float> tmp_phi;
@@ -308,7 +308,6 @@ int main(int argv, char* argc[])
 		//***********************START constituents LOOP*********************************
 		for (unsigned j = 0; j < constituents.size(); j++)
 		{
-			if (fabs(constituents[j].eta()) > particle_absetamax || constituents[j].pt() < particle_ptmin) continue;
 			if (particleData.charge(constituents[j].user_index()))
 			{
 				chMult++;
